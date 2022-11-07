@@ -9,11 +9,13 @@
 #include <random>
 #include <type_traits>
 
-#ifndef QM_RAND_HPP_
-#define QM_RAND_HPP_
+#ifndef RANDOM_HPP_
+#define RANDOM_HPP_
 
-// rand already exists in global namespace so I don't want to redef
 namespace libqm {
+// ok, so the gist of what this does is it restricts typing to just ints and
+// floats as well as their derivatives. this in essence simplifies the error
+// messages to the template declaration and the line it that casued it
 template <typename T,
           typename =
               typename std::enable_if<std::is_integral<T>::value ||
@@ -51,4 +53,4 @@ class rand_obj {
 };
 }  // namespace libqm
 
-#endif  // QM_RAND_HPP_
+#endif  // RANDOM_HPP_
