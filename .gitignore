@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#testing
+main.cpp
+
