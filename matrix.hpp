@@ -12,7 +12,7 @@ namespace libqm {
 
 template <class T>
 class matrix {
- private:
+ protected:
   size_t y;
   size_t x;
   std::vector<T> *elements;
@@ -41,6 +41,7 @@ class matrix {
   size_t get_y();
   size_t get_x();
   size_t get_size();
+  bool resize(size_t new_x, size_t new_y);
   T &at(size_t x, size_t y);
   T at(size_t x, size_t y) const;
   bool foreach(std::function<bool(T &)>);
@@ -55,8 +56,6 @@ class matrix {
 
 template <class T>
 matrix<T>::matrix() : y(0), x(0) {
-  // this is not for use, matrix shouldn't be initialized
-  // this->matrix = new std::vector<T>();
   this->elements = nullptr;
 }
 
@@ -142,6 +141,22 @@ size_t matrix<T>::get_x() {
 template <class T>
 size_t matrix<T>::get_size() {
   return this->elements->size();
+}
+/// @brief Note: new elements will be uninitalized
+/// @tparam T
+/// @param new_x
+/// @param new_y
+/// @return
+template <class T>
+bool matrix<T>::resize(size_t new_x, size_t new_y) {
+  if (new_x < this->x || new_y < this->y) return false;
+  std::vector<T> *new_eles = new std::vector<T>(x * y);
+  for (size_t i = 0; i < this->y; i++) {
+    for (size_t j = 0; j < this->x; j++) {
+      new_eles->at(i * new_x + j) = this->at(j, i);
+    }
+  }
+  this->elements = new_eles;
 }
 
 template <class T>
