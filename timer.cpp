@@ -5,24 +5,26 @@
 
 namespace libqm {
 
-void timer::reset() {
+void stopwatch::reset() {
   this->start_time = clock();
   this->prior_accum = 0;
 }
 
-void timer::pause() {
-  if (this->is_paused) return;
+void stopwatch::pause() {
+  if (this->is_paused)
+    return;
   this->prior_accum += clock() - this->start_time;
   this->is_paused = true;
 }
 
-void timer::resume() {
-  if (!this->is_paused) return;
+void stopwatch::resume() {
+  if (!this->is_paused)
+    return;
   this->start_time = clock();
   this->is_paused = false;
 }
 
-double timer::get_sec() const {
+double stopwatch::get_sec() const {
   if (this->is_paused)
     return static_cast<double>(this->prior_accum) / CLOCKS_PER_SEC;
   else
@@ -31,7 +33,7 @@ double timer::get_sec() const {
            CLOCKS_PER_SEC;
 }
 
-double timer::get_min() const {
+double stopwatch::get_min() const {
   if (this->is_paused)
     return static_cast<double>(this->prior_accum) / (CLOCKS_PER_SEC * 60);
   else
@@ -40,7 +42,7 @@ double timer::get_min() const {
            (CLOCKS_PER_SEC * 60);
 }
 
-int timer::get_ticks() const {
+int stopwatch::get_ticks() const {
   return (clock() - this->start_time) + this->prior_accum;
 }
-}  // namespace libqm
+} // namespace libqm

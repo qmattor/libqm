@@ -2,19 +2,20 @@
 // Copyright 2022
 
 #include <ctime>
+#include <functional>
 
 #ifndef TIMER_HPP_
 #define TIMER_HPP_
 
 namespace libqm {
-class timer {
- protected:
+class stopwatch {
+protected:
   clock_t prior_accum;
   clock_t start_time;
   bool is_paused;
 
- public:
-  timer() : prior_accum(0), start_time(clock()), is_paused(true) {}
+public:
+  stopwatch() : prior_accum(0), start_time(clock()), is_paused(true) {}
   void pause();
   void resume();
   void reset();
@@ -24,6 +25,18 @@ class timer {
   int get_ticks() const;
 };
 
-}  // namespace libqm
+/// please be aware, ONLY 1 CAN EXIST AT ANY TIME
+class timer {
+public:
+  timer(std::function<void(int)> handler);
+  timer(std::function<void(int)> handler, uint16_t time);
+  timer(std::function<void(int)> handler, uint16_t time, bool start);
+  void start();
+  void stop();
+  void pause();
+  void set_interval(uint32_t miliseconds);
+};
 
-#endif  // TIMER_HPP_
+} // namespace libqm
+
+#endif // TIMER_HPP_

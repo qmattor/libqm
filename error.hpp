@@ -7,25 +7,26 @@
 #define __QM_ERROR__
 
 namespace libqm {
-void log(const char *, ...);
-void init_log();
-void init_log(char *file);
-void close_log();
 
-#define QM_exception(exception)                                        \
-  {                                                                    \
-    log("Exception thrown at line %i in file %s", __LINE__, __FILE__); \
-    close_log();                                                       \
-    throw(exception);                                                  \
+#define QM_exception(exception)                                                \
+  {                                                                            \
+    libqm::log("Exception thrown at line %i in file %s\n", __LINE__,           \
+               __FILE__);                                                      \
+    throw(exception);                                                          \
   }
 
 class errno_exception : public std::exception {
- private:
+private:
   int errno;
 
- public:
+public:
   errno_exception(int err);
   const char *what() const noexcept;
 };
-}  // namespace libqm
+
+class n_imp_exception : public std::exception {
+  const char *what() const noexcept;
+};
+
+} // namespace libqm
 #endif

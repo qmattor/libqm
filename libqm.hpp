@@ -1,6 +1,6 @@
 
 #include "error.hpp"
-#include "libft/libft.h"
+#include "logging.hpp"
 #include "matrix.hpp"
 #include "random.hpp"
 #include "timer.hpp"
