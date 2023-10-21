@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   random.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/19 12:03:53 by qmattor           #+#    #+#             */
+/*   Updated: 2023/10/19 12:04:24 by qmattor          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // Quincy Mattor
 // Copyright 2022
 
@@ -21,11 +33,11 @@ template <typename T,
               typename std::enable_if<std::is_integral<T>::value ||
                                       std::is_floating_point<T>::value>::type>
 class rand_obj {
- private:
+private:
   std::default_random_engine *generator;
   std::uniform_int_distribution<T> *distribution;
 
- public:
+public:
   rand_obj() {
     unsigned int seed =
         std::chrono::system_clock::now().time_since_epoch().count();
@@ -51,6 +63,6 @@ class rand_obj {
     return ret;
   }
 };
-}  // namespace libqm
+} // namespace libqm
 
-#endif  // RANDOM_HPP_
+#endif // RANDOM_HPP_

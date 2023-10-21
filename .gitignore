@@ -34,3 +34,8 @@
 #testing
 main.cpp
 
+#debugging
+*.dsym
+
+#hidden
+.*

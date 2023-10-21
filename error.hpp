@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/19 12:04:35 by qmattor           #+#    #+#             */
+/*   Updated: 2023/10/20 21:02:33 by qmattor          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // Quincy Mattor
 // Copyright 2023
 
 #include <exception>
+#include <string.h>
 
 #ifndef __QM_ERROR__
 #define __QM_ERROR__
@@ -17,7 +30,7 @@ namespace libqm {
 
 class errno_exception : public std::exception {
 private:
-  int errno;
+  int errnum;
 
 public:
   errno_exception(int err);

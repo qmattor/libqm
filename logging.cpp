@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   logging.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/19 12:04:42 by qmattor           #+#    #+#             */
+/*   Updated: 2023/10/20 17:47:40 by qmattor          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // Quincy Mattor
 // Copyright 2023
 
 #include "logging.hpp"
+
 // gloabal statics
 bool is_init = false;
 FILE *fp = NULL;
