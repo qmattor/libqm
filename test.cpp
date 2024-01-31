@@ -10,18 +10,18 @@
 #include <boost/test/unit_test.hpp>
 using namespace libqm;
 
-void timeout_thread() { QM_exception(std::runtime_error("timeout")); }
+// void timeout_thread() { QM_exception(std::runtime_error("timeout")); }
 
-BOOST_AUTO_TEST_CASE(TEST_TIMER) {
-  init_log("TEST_TIMER.txt");
-  try {
-  } catch (...) {
-  }
-  close_log();
-}
+// BOOST_AUTO_TEST_CASE(TEST_TIMER) {
+//   init_log("TEST_TIMER.txt");
+//   try {
+//   } catch (...) {
+//   }
+//   close_log();
+// }
 
 BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
-  init_log("TEST_MATRIX.txt");
+  init_log("TEST_MATRIX.log");
   log_setverbosity(verbosity::DEBUG);
   try {
     log("BEGIN MATRIX\n");
@@ -87,6 +87,7 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
     BOOST_CHECK_EQUAL(y.contains(14), false);
     BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 12; }), true);
     log("completed\nchecking matrix operations ... ");
+
   } catch (...) {
   }
   close_log();

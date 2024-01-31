@@ -3,7 +3,7 @@ NAME := libqm.a
 CFLAGS := -Wall -Wextra -Werror -pedantic -std=c++14
 LIBFT := libft/libft.a
 GNL := get_next_line/get_next_line.a
-SRC := error.cpp timer.cpp logging.cpp
+SRC := error.cpp timer.cpp logging.cpp Fraction.cpp
 
 OBJECTS := $(patsubst %.cpp,%.o,$(SRC))
 
@@ -41,7 +41,7 @@ tests: test
 
 test: $(OBJECTS)
 	$(CC) $(CFLAGS) -c test.cpp -o test.o
-	$(CC) $(CFLAGS) $^ test.o -lboost_unit_test_framework -o tests
+	$(CC) $(CFLAGS) $^ test.o libft/libft.a -lboost_unit_test_framework -o tests
 
 main_test: $(OBJECTS)
 	$(CC) $(CFLAGS) -g $^ main.cpp -o main.out

@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:04:42 by qmattor           #+#    #+#             */
-/*   Updated: 2023/10/20 17:47:40 by qmattor          ###   ########.fr       */
+/*   Updated: 2023/10/21 16:55:50 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ libqm::verbosity verbosity_level = libqm::verbosity::NORMAL;
 
 namespace libqm {
 
-void log(const char *fmt, ...) {
-  if (!is_init)
-    return;
-  va_list args;
-  va_start(args, fmt);
-  vfprintf(fp, fmt, args);
-  va_end(args);
-}
 void init_log() {
   fp = fopen("Log.txt", "w");
   if (fp == NULL)
@@ -54,6 +46,20 @@ void init_log(std::string file) {
   }
   is_init = true;
   free(tmp);
+}
+
+void init_log(FILE *p) {
+  fp = p;
+  is_init = true;
+}
+
+void log(const char *fmt, ...) {
+  if (!is_init)
+    return;
+  va_list args;
+  va_start(args, fmt);
+  vfprintf(fp, fmt, args);
+  va_end(args);
 }
 
 void log(FILE *fd, const char *fmt, ...) {

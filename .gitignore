@@ -39,3 +39,7 @@ main.cpp
 
 #hidden
 .*
+
+
+#log files
+*.log

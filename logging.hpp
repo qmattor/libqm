@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:04:45 by qmattor           #+#    #+#             */
-/*   Updated: 2023/10/19 12:04:46 by qmattor          ###   ########.fr       */
+/*   Updated: 2023/10/21 16:55:19 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void log(FILE *fd, verbosity v, const char *, ...);
 void log(FILE *fd, const char *, ...);
 void log_setverbosity(verbosity v);
 void init_log();
+void init_log(FILE *p);
 void init_log(const char *file);
 void init_log(std::string file);
 void close_log();
