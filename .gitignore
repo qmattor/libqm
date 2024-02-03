@@ -43,3 +43,7 @@ main.cpp
 
 #log files
 *.log
+
+#a couple of individual cases
+libqm
+libft

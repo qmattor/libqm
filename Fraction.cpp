@@ -6,48 +6,97 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 12:00:52 by qmattor           #+#    #+#             */
-/*   Updated: 2024/01/31 13:35:49 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/03 00:58:30 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fraction.hpp"
 #include "error.hpp"
 #include "logging.hpp"
+#include <cmath>
 #include <iostream>
 namespace libqm {
 // private
-
-static FracType max(FracType a, FracType b) {
-  return a * (a - b > 0) | b * (b - a >= 0);
-}
-static FracType min(FracType a, FracType b) {
-  return a * (a - b < 0) | b * (b - a <= 0);
-}
 static int gcd(FracType a, FracType b) {
-  if (a == 0 || b == 0)
-    return a | b;
-  return gcd(max(a, b) - min(a, b), min(a, b));
+  FracType R;
+  while ((R = (a % b)) > 0) {
+    a = b;
+    b = R;
+  }
+  return b;
 }
 
 void Frac::reduce() {
-  auto tmp = gcd(numerator, denominator);
+  log(verbosity::DEBUG, "reducing fraction %d/%d\n", numerator, denominator);
+  auto tmp = abs(numerator) == abs(denominator)
+                 ? abs(numerator)
+                 : gcd(abs(numerator), abs(denominator));
   numerator /= tmp;
   denominator /= tmp;
+  log(verbosity::DEBUG, "reduced fraction to %d/%d\n", numerator, denominator);
 }
 
 // public
+#pragma region constructors
 Frac::Frac() : numerator(0), denominator(1) {}
-Frac::Frac(FracType a, FracType b) : numerator(a) {
+Frac::Frac(long a, long b) : numerator(a) {
   if (b == 0)
-    QM_exception(std::runtime_error("denominator cannot be 0"));
+    QM_exception(std::runtime_error("value out of bounds"));
+  if (b < 0) {
+    numerator = -numerator;
+    b = -b;
+  }
   denominator = b;
+  reduce();
 }
 
-Frac::Frac(double decimal) {
-  (void)decimal;
-  QM_exception(n_imp_exception())
+Frac::Frac(long f) : numerator(f), denominator(1) {}
+Frac::Frac(int f) : numerator(f), denominator(1) {}
+
+Frac Frac::operator=(long i) {
+  Frac ret(i, 1);
+  return ret;
 }
 
+Frac Frac::operator=(int i) {
+  Frac ret(i, 1);
+  return ret;
+}
+
+#pragma endregion
+
+#pragma region comparators
+bool Frac::operator==(const Frac other) const {
+  return ((numerator == other.numerator && denominator == other.denominator) ||
+          (0 == numerator && other.numerator == 0));
+}
+bool Frac::operator!=(const Frac other) const {
+  return (numerator != other.numerator ||
+          (denominator != other.denominator && numerator != 0));
+}
+bool Frac::operator<=(const Frac other) const {
+  auto tmp_num = numerator * other.denominator;
+  auto tmp_other_num = other.numerator * denominator;
+  return tmp_num <= tmp_other_num;
+}
+bool Frac::operator>=(const Frac other) const {
+  auto tmp_num = numerator * other.denominator;
+  auto tmp_other_num = other.numerator * denominator;
+  return tmp_num >= tmp_other_num;
+}
+bool Frac::operator<(const Frac other) const {
+  auto tmp_num = numerator * other.denominator;
+  auto tmp_other_num = other.numerator * denominator;
+  return tmp_num > tmp_other_num;
+}
+bool Frac::operator>(const Frac other) const {
+  auto tmp_num = numerator * other.denominator;
+  auto tmp_other_num = other.numerator * denominator;
+  return tmp_num > tmp_other_num;
+}
+#pragma endregion
+
+#pragma region ops
 Frac Frac::operator*(const Frac &other) const {
   Frac ret;
   ret.numerator = this->numerator * other.numerator;
@@ -90,24 +139,24 @@ Frac Frac::operator+=(const Frac &other) {
   return *this;
 }
 Frac Frac::operator-(const Frac &other) const {
-  Frac ret;
-  ret.numerator = denominator * other.numerator - numerator * other.denominator;
-  ret.denominator = this->denominator * other.denominator;
+  Frac ret(numerator * other.denominator - denominator * other.numerator,
+           this->denominator * other.denominator);
   ret.reduce();
   return ret;
 }
 Frac Frac::operator-=(const Frac &other) {
   Frac ret;
-  ret.numerator = denominator * other.numerator - numerator * other.denominator;
+  ret.numerator = numerator * other.denominator - denominator * other.numerator;
   ret.denominator = this->denominator * other.denominator;
   ret.reduce();
   *this = ret;
   return *this;
 }
 
+// form of x/y
 std::istream &operator>>(std::istream &in, Frac &f) {
-  QM_exception(n_imp_exception());
   in >> f.numerator;
+  in.get();
   in >> f.denominator;
   return in;
 }
@@ -118,4 +167,97 @@ std::ostream &operator<<(std::ostream &out, const Frac &f) {
     out << f.numerator << "/" << f.denominator;
   return out;
 }
+
+Frac Frac::operator*(long l) const {
+  Frac f = *this;
+  f.numerator *= l;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator*=(long l) {
+  numerator *= l;
+  reduce();
+  return *this;
+}
+Frac Frac::operator/(long l) const {
+  Frac f = *this;
+  f.denominator *= l;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator/=(long l) {
+  denominator *= l;
+  reduce();
+  return *this;
+}
+Frac Frac::operator+(long l) const {
+  Frac f = *this;
+  f.numerator += l * f.denominator;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator+=(long l) {
+  numerator += denominator * l;
+  reduce();
+  return *this;
+}
+Frac Frac::operator-(long l) const {
+  Frac f = *this;
+  f.numerator -= l * f.denominator;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator-=(long l) {
+  numerator -= denominator * l;
+  reduce();
+  return *this;
+}
+
+Frac Frac::operator*(int i) const {
+  Frac f = *this;
+  f.numerator *= i;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator*=(int i) {
+  numerator *= i;
+  reduce();
+  return *this;
+}
+Frac Frac::operator/(int i) const {
+  Frac f = *this;
+  f.denominator *= i;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator/=(int i) {
+  denominator *= i;
+  reduce();
+  return *this;
+}
+Frac Frac::operator+(int i) const {
+  Frac f = *this;
+  f.numerator += i * f.denominator;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator+=(int i) {
+  numerator += denominator * i;
+  reduce();
+  return *this;
+}
+Frac Frac::operator-(int i) const {
+  Frac f = *this;
+  f.numerator -= i * f.denominator;
+  f.reduce();
+  return f;
+}
+Frac Frac::operator-=(int i) {
+  numerator -= denominator * i;
+  reduce();
+  return *this;
+}
+
+#pragma endregion
+
 } // namespace libqm

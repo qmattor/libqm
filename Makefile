@@ -14,23 +14,23 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJECTS)
-	make -C libft
-	make -C get_next_line
+	# make -C libft
+	# make -C get_next_line
 	ar rc $@ $^
-	ranlib $(LIBFT) $(GNL) $(NAME)
+	ranlib $(NAME)
 
 lclean:
 	rm -f *.log
 
 clean:
-	make -C libft clean
-	make -C get_next_line clean
+	# make -C libft clean
+	# make -C get_next_line clean
 	rm -f test.o
 	rm -f $(OBJECTS)
 
 fclean: clean lclean
-	make -C libft fclean
-	make -C get_next_line fclean
+	# make -C libft fclean
+	# make -C get_next_line fclean
 	rm -f tests
 	rm -f main.out
 	rm -f $(NAME)
@@ -41,7 +41,7 @@ tests: test
 
 test: $(OBJECTS)
 	$(CC) $(CFLAGS) -c test.cpp -o test.o
-	$(CC) $(CFLAGS) $^ test.o libft/libft.a -lboost_unit_test_framework -o tests
+	$(CC) $(CFLAGS) $^ test.o -lboost_unit_test_framework -o tests
 
 main_test: $(OBJECTS)
 	$(CC) $(CFLAGS) -g $^ main.cpp -o main.out
