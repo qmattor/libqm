@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rw_header.hpp                                      :+:      :+:    :+:   */
+/*   Semephore.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 13:56:10 by qmattor           #+#    #+#             */
-/*   Updated: 2023/12/01 20:31:42 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/12 12:48:15 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cstdint>
 #include <pthread.h>
+
+#include <cstdint>
 #include <thread>
 
 #ifndef __RW_HEADER__
 #define __RW_HEADER__
 namespace libqm {
 
-template <int SIZE> class Semaphore {
-private:
+template <int SIZE>
+class Semaphore {
+ private:
   // I'm just going to cheat a little here
   pthread_mutex_t m;
   int32_t *var;
 
-public:
+ public:
   // no copies >:(
   Semaphore(const Semaphore &) = delete;
   Semaphore &operator=(const Semaphore &) = delete;
@@ -58,11 +60,11 @@ public:
 };
 
 class mutex : private Semaphore<1> {
-public:
+ public:
   mutex() : Semaphore(0) {}
   void lock() { wait(); }
   void unlock() { signal(); }
 };
-} // namespace libqm
+}  // namespace libqm
 
 #endif

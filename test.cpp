@@ -1,9 +1,10 @@
 // Quincy Mattor
 // Copyright 2023
 
-#include "libqm.hpp"
 #include <climits>
 #include <thread>
+
+#include "libqm.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE Main
@@ -47,8 +48,9 @@ BOOST_AUTO_TEST_CASE(TEST_FRACTIONS) {
     BOOST_CHECK_GE(Frac(2, 3), Frac(2, 3));
     BOOST_CHECK_GE(Frac(0, 2), Frac(0, 3));
 
-    log(verbosity::NORMAL, "idc to write more tests than that, this is "
-                           "stupid\nChecking binary ops:\n");
+    log(verbosity::NORMAL,
+        "idc to write more tests than that, this is "
+        "stupid\nChecking binary ops:\n");
 
     Frac ans(9, 4);
     ans += ans;
@@ -73,7 +75,8 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
     log("BEGIN MATRIX\n");
     log("beigning signal alarm for 5 seconds\n");
     matrix<int8_t> m(2, 3, 3);
-    log("matrix is initialized\nconfirming matrix is initalized to the correct "
+    log("matrix is initialized\nconfirming matrix is initalized to the "
+        "correct "
         "values ... ");
     BOOST_CHECK_EQUAL(m(1, 2), 3);
     BOOST_CHECK_EQUAL(m(0, 1), 3);
@@ -105,33 +108,33 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
     BOOST_CHECK_EQUAL(y.contains([](int8_t x) { return x == 3; }), true);
     BOOST_CHECK_EQUAL(y.contains([](int8_t x) { return x == 5; }), false);
     log("completed\nchecking foreach ... ");
-    y.foreach ([](int8_t &x) {
+    y.foreach([](int8_t &x) {
       x = 5;
       return true;
     });
     BOOST_CHECK_EQUAL(y.contains(3), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 5; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 5; }), true);
     log("completed\nchecking matrix operations ... ");
     y = y + 2;
     BOOST_CHECK_EQUAL(y.contains(5), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 7; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 7; }), true);
     y = y * 2;
     BOOST_CHECK_EQUAL(y.contains(7), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 14; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 14; }), true);
     y = y - 2;
     BOOST_CHECK_EQUAL(y.contains(14), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 12; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 12; }), true);
     log("completed\nchecking scaler assignment operators ... ");
     y = m + 2;
     y += 2;
     BOOST_CHECK_EQUAL(y.contains(5), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 7; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 7; }), true);
     y *= 2;
     BOOST_CHECK_EQUAL(y.contains(7), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 14; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 14; }), true);
     y -= 2;
     BOOST_CHECK_EQUAL(y.contains(14), false);
-    BOOST_CHECK_EQUAL(y.foreach ([](int8_t &x) { return x == 12; }), true);
+    BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 12; }), true);
     log("completed\nchecking matrix operations ... ");
 
   } catch (...) {

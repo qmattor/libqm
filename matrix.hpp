@@ -6,31 +6,33 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:03:45 by qmattor           #+#    #+#             */
-/*   Updated: 2024/01/29 18:38:07 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/13 00:33:24 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Quincy Mattor
 // Copyright 2022
 
-#include "logging.hpp"
 #include <functional>
 #include <iostream>
 #include <vector>
+
+#include "logging.hpp"
 
 #ifndef MATRIX_HPP_
 #define MATRIX_HPP_
 
 namespace libqm {
 
-template <class T> class matrix {
-protected:
+template <class T>
+class matrix {
+ protected:
   size_t y;
   size_t x;
   std::vector<T> elements;
 
-public:
-  matrix(); // purely for use of creating blank things to overwrite later
+ public:
+  matrix();  // purely for use of creating blank things to overwrite later
   matrix(size_t x, size_t y);
   matrix(size_t x, size_t y, T init);
   matrix(matrix &&other) noexcept;
@@ -61,8 +63,8 @@ public:
   T at(size_t x, size_t y) const;
   // if resized, there's no garantee that the data will make sense any more
   bool resize(size_t new_x, size_t new_y);
-  bool foreach (std::function<bool(T &)>);
-  bool foreach (std::function<bool(size_t, size_t, T &)>);
+  bool foreach(std::function<bool(T &)>);
+  bool foreach(std::function<bool(size_t, size_t, T &)>);
   bool contains(const T ele) const;
   bool contains(std::function<bool(T)> func) const;
   bool contains(std::function<bool(size_t, size_t, T)>) const;
@@ -80,26 +82,28 @@ public:
   friend std::ostream &operator<<(std::ostream &, const matrix<Z> &);
 };
 
-template <class T> matrix<T>::matrix() : y(0), x(0) {}
+template <class T>
+matrix<T>::matrix() : y(0), x(0) {}
 
-template <class T> matrix<T>::matrix(size_t x, size_t y, T init) : y(y), x(x) {
-  if (y == 0 || x == 0)
-    throw std::runtime_error("invalid initial size");
+template <class T>
+matrix<T>::matrix(size_t x, size_t y, T init) : y(y), x(x) {
+  if (y == 0 || x == 0) throw std::runtime_error("invalid initial size");
   elements.resize(y * x);
   for (T &t : elements) {
     t = init;
   }
 }
 
-template <class T> matrix<T>::matrix(size_t x, size_t y) : y(y), x(x) {
-  if (y == 0 || x == 0)
-    throw std::runtime_error("invalid initial size");
+template <class T>
+matrix<T>::matrix(size_t x, size_t y) : y(y), x(x) {
+  if (y == 0 || x == 0) throw std::runtime_error("invalid initial size");
   elements.resize(y * x);
 }
 
 // template <class T> matrix<T>::~matrix() { delete this->elements; }
 
-template <class T> matrix<T>::matrix(matrix &&other) noexcept {
+template <class T>
+matrix<T>::matrix(matrix &&other) noexcept {
   if (other != *this) {
     this->y = other.y;
     this->x = other.x;
@@ -107,56 +111,67 @@ template <class T> matrix<T>::matrix(matrix &&other) noexcept {
   }
 }
 
-template <class T> matrix<T>::matrix(const matrix<T> &other) {
+template <class T>
+matrix<T>::matrix(const matrix<T> &other) {
   if (*this != other) {
     this->y = other.y;
     this->x = other.x;
     this->elements.resize(this->y * this->x);
-    std::copy(other.elements.begin(), other.elements.end(),
-              this->elements.begin());
+    std::copy(
+        other.elements.begin(), other.elements.end(), this->elements.begin());
   }
 }
 
-template <class T> matrix<T> &matrix<T>::operator=(const matrix &other) {
+template <class T>
+matrix<T> &matrix<T>::operator=(const matrix &other) {
   this->y = other.y;
   this->x = other.x;
   this->elements.resize(this->y * this->x);
-  std::copy(other.elements.begin(), other.elements.end(),
-            this->elements.begin());
+  std::copy(
+      other.elements.begin(), other.elements.end(), this->elements.begin());
   return *this;
 }
 
-template <class T> matrix<T> &matrix<T>::operator=(matrix &&other) noexcept {
-  if (other == *this)
-    return *this;
+template <class T>
+matrix<T> &matrix<T>::operator=(matrix &&other) noexcept {
+  if (other == *this) return *this;
   this->y = other.y;
   this->x = other.x;
   std::swap(this->elements, other.elements);
   return *this;
 }
 
-template <class T> T &matrix<T>::operator()(size_t x, size_t y) {
+template <class T>
+T &matrix<T>::operator()(size_t x, size_t y) {
   return this->elements.at(y * this->x + x);
 }
 
-template <class T> T matrix<T>::operator()(size_t x, size_t y) const {
+template <class T>
+T matrix<T>::operator()(size_t x, size_t y) const {
   return this->elements.at(y * this->x + x);
 }
 
 // const doesn't matter bc by value
-template <class T> size_t matrix<T>::get_y() const { return this->y; }
+template <class T>
+size_t matrix<T>::get_y() const {
+  return this->y;
+}
 
-template <class T> size_t matrix<T>::get_x() const { return this->x; }
+template <class T>
+size_t matrix<T>::get_x() const {
+  return this->x;
+}
 
-template <class T> size_t matrix<T>::get_size() const {
+template <class T>
+size_t matrix<T>::get_size() const {
   return this->elements.size();
 }
 
 // removed temporarily
 
-template <class T> bool matrix<T>::resize(size_t new_x, size_t new_y) {
-  if (new_x == 0 || new_y == 0)
-    return false;
+template <class T>
+bool matrix<T>::resize(size_t new_x, size_t new_y) {
+  if (new_x == 0 || new_y == 0) return false;
 
   // fuck it, don't care about maintaining elements in the right spot.
   x = new_x;
@@ -165,31 +180,27 @@ template <class T> bool matrix<T>::resize(size_t new_x, size_t new_y) {
   return true;
 }
 
-template <class T> T &matrix<T>::at(size_t x, size_t y) {
-  if (y >= this->y)
-    throw std::out_of_range("y overflow");
-  if (x >= this->x)
-    throw std::out_of_range("x overflow");
+template <class T>
+T &matrix<T>::at(size_t x, size_t y) {
+  if (y >= this->y) throw std::out_of_range("y overflow");
+  if (x >= this->x) throw std::out_of_range("x overflow");
   return (*this)(x, y);
 }
 
-template <class T> T matrix<T>::at(size_t x, size_t y) const {
-  if (y >= this->y)
-    throw std::out_of_range("y overflow");
-  if (x >= this->x)
-    throw std::out_of_range("x overflow");
+template <class T>
+T matrix<T>::at(size_t x, size_t y) const {
+  if (y >= this->y) throw std::out_of_range("y overflow");
+  if (x >= this->x) throw std::out_of_range("x overflow");
   return (*this)(x, y);
 }
 
-template <class T> bool matrix<T>::operator!=(const matrix<T> &other) const {
-  if (other.y != this->y)
-    return true;
-  if (other.x != this->x)
-    return true;
+template <class T>
+bool matrix<T>::operator!=(const matrix<T> &other) const {
+  if (other.y != this->y) return true;
+  if (other.x != this->x) return true;
   try {
     for (size_t i = 0; i < this->elements.size(); i++)
-      if (this->elements.at(i) != other.elements.at(i))
-        return true;
+      if (this->elements.at(i) != other.elements.at(i)) return true;
   } catch (std::exception &e) {
     return true;
   }
@@ -199,36 +210,34 @@ template <class T> bool matrix<T>::operator!=(const matrix<T> &other) const {
 // std::__vector_base<s_state_node, std::allocator<s_state_node>>::value_type
 // std::__vector_base<s_state_node, std::allocator<s_state_node>>::value_type
 
-template <class T> bool matrix<T>::operator==(const matrix &other) const {
-  if (other.y != this->y)
-    return false;
-  if (other.x != this->x)
-    return false;
+template <class T>
+bool matrix<T>::operator==(const matrix &other) const {
+  if (other.y != this->y) return false;
+  if (other.x != this->x) return false;
   try {
     for (size_t i = 0; i < this->elements.size(); i++)
-      if (!(this->elements.at(i) == other.elements.at(i)))
-        return false;
+      if (!(this->elements.at(i) == other.elements.at(i))) return false;
   } catch (std::out_of_range &e) {
     return false;
   }
   return true;
 }
 
-template <class T> bool matrix<T>::contains(T ele) const {
+template <class T>
+bool matrix<T>::contains(T ele) const {
   log(verbosity::DEBUG, "begining contains\n");
   for (T e : this->elements) {
-    if (e == ele)
-      return true;
+    if (e == ele) return true;
   }
   log(verbosity::DEBUG, "finishing contains\n");
   return false;
 }
 
-template <class T> bool matrix<T>::contains(std::function<bool(T)> func) const {
+template <class T>
+bool matrix<T>::contains(std::function<bool(T)> func) const {
   log(verbosity::DEBUG, "begining contains\n");
   for (auto e : this->elements)
-    if (func(e))
-      return true;
+    if (func(e)) return true;
   return false;
   log(verbosity::DEBUG, "finishing contains\n");
 }
@@ -237,36 +246,35 @@ template <class T>
 bool matrix<T>::contains(std::function<bool(size_t, size_t, T)> func) const {
   for (size_t j = 0; j < this->y; j++)
     for (size_t i = 0; i < this->x; i++)
-      if (func(i, j, this->at(i, j)))
-        return true;
+      if (func(i, j, this->at(i, j))) return true;
   return false;
 }
 
-template <class T> T &matrix<T>::find(T ele) {
+template <class T>
+T &matrix<T>::find(T ele) {
   for (size_t i = 0; i < this->elements.size(); i++)
-    if (this->elements.at(i) == ele)
-      return this->elements.at(i);
+    if (this->elements.at(i) == ele) return this->elements.at(i);
   throw std::runtime_error("Matrix does not contian element");
 }
 
-template <class T> bool matrix<T>::foreach (std::function<bool(T &)> func) {
+template <class T>
+bool matrix<T>::foreach(std::function<bool(T &)> func) {
   for (size_t j = 0; j < this->y; j++)
     for (size_t i = 0; i < this->x; i++)
-      if (!func(this->at(i, j)))
-        return false;
+      if (!func(this->at(i, j))) return false;
   return true;
 }
 
 template <class T>
-bool matrix<T>::foreach (std::function<bool(size_t, size_t, T &)> func) {
+bool matrix<T>::foreach(std::function<bool(size_t, size_t, T &)> func) {
   for (size_t j = 0; j < this->y; j++)
     for (size_t i = 0; i < this->x; i++)
-      if (!func(i, j, this->elements.at(j * this->x + i)))
-        return false;
+      if (!func(i, j, this->elements.at(j * this->x + i))) return false;
   return true;
 }
 
-template <class T> std::istream &operator>>(std::istream &in, matrix<T> &m) {
+template <class T>
+std::istream &operator>>(std::istream &in, matrix<T> &m) {
   in >> m.x;
   in >> m.y;
   m.elements.resize(m.x * m.y);
@@ -295,7 +303,8 @@ std::ostream &operator<<(std::ostream &out, const matrix<T> &m) {
 
 // currently only for
 // matrix cross product
-template <class T> matrix<T> matrix<T>::operator*(const matrix<T> &other) {
+template <class T>
+matrix<T> matrix<T>::operator*(const matrix<T> &other) {
   if (other.x != this->x || other.y != this->y || other.y != this->x)
     throw std::runtime_error("Matrix mismatch");
   matrix<T> ret(this->x, this->y);
@@ -312,7 +321,8 @@ template <class T> matrix<T> matrix<T>::operator*(const matrix<T> &other) {
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator+(const matrix<T> &other) {
+template <class T>
+matrix<T> matrix<T>::operator+(const matrix<T> &other) {
   if (other.x != this->x || other.y != this->y)
     throw std::runtime_error("Matrix mismatch");
   matrix<T> ret(this->x, this->y);
@@ -324,7 +334,8 @@ template <class T> matrix<T> matrix<T>::operator+(const matrix<T> &other) {
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator-(const matrix<T> &other) {
+template <class T>
+matrix<T> matrix<T>::operator-(const matrix<T> &other) {
   if (other.x != this->x || other.y != this->y)
     throw std::runtime_error("Matrix mismatch");
   matrix<T> ret(this->x, this->y);
@@ -336,71 +347,79 @@ template <class T> matrix<T> matrix<T>::operator-(const matrix<T> &other) {
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator+(const T scaler) {
+template <class T>
+matrix<T> matrix<T>::operator+(const T scaler) {
   matrix<T> ret;
   ret = *this;
-  ret.foreach ([scaler](T &ele) {
+  ret.foreach([scaler](T &ele) {
     ele += scaler;
     return true;
   });
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator*(const T scaler) {
+template <class T>
+matrix<T> matrix<T>::operator*(const T scaler) {
   matrix<T> ret;
   ret = *this;
-  ret.foreach ([scaler](T &ele) {
+  ret.foreach([scaler](T &ele) {
     ele *= scaler;
     return true;
   });
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator*=(const T scaler) {
-  this->foreach ([scaler](T &value) {
+template <class T>
+matrix<T> matrix<T>::operator*=(const T scaler) {
+  this->foreach([scaler](T &value) {
     value *= scaler;
     return true;
   });
   return *this;
 }
 
-template <class T> matrix<T> matrix<T>::operator+=(const T scaler) {
-  this->foreach ([scaler](T &value) {
+template <class T>
+matrix<T> matrix<T>::operator+=(const T scaler) {
+  this->foreach([scaler](T &value) {
     value += scaler;
     return true;
   });
   return *this;
 }
 
-template <class T> matrix<T> matrix<T>::operator-(const T scaler) {
+template <class T>
+matrix<T> matrix<T>::operator-(const T scaler) {
   matrix<T> ret;
   ret = *this;
-  ret.foreach ([scaler](T &ele) {
+  ret.foreach([scaler](T &ele) {
     ele -= scaler;
     return true;
   });
   return ret;
 }
 
-template <class T> matrix<T> matrix<T>::operator-=(const T scaler) {
-  this->foreach ([scaler](T &value) {
+template <class T>
+matrix<T> matrix<T>::operator-=(const T scaler) {
+  this->foreach([scaler](T &value) {
     value -= scaler;
     return true;
   });
   return *this;
 }
 
-template <class T> matrix<T> matrix<T>::operator/(const T scaler) {
+template <class T>
+matrix<T> matrix<T>::operator/(const T scaler) {
   matrix<T> ret;
   ret = *this;
-  ret.foreach ([&scaler](T &value) {
+  ret.foreach([&scaler](T &value) {
     value /= scaler;
     return true;
   });
   return ret;
 }
 
-template <class T> void matrix<T>::row_swap(size_t a, size_t b) {
+template <class T>
+void matrix<T>::row_swap(size_t a, size_t b) {
   for (size_t x = 0; x < this->x; x++) {
     T tmp = at(x, a);
     at(x, a) = at(x, b);
@@ -408,17 +427,19 @@ template <class T> void matrix<T>::row_swap(size_t a, size_t b) {
   }
 }
 
-template <class T> void matrix<T>::add_rows(size_t a, size_t b) {
+template <class T>
+void matrix<T>::add_rows(size_t a, size_t b) {
   for (size_t x = 0; x < this->x; x++) {
     at(x, a) += at(x, b);
   }
 }
 
-template <class T> void matrix<T>::scale_row(size_t a, T scalor) {
+template <class T>
+void matrix<T>::scale_row(size_t a, T scalor) {
   for (size_t x = 0; x < this->x; x++) {
     at(x, a) *= scalor;
   }
 }
 
-} // namespace libqm
-#endif // MATRIX_HPP_
+}  // namespace libqm
+#endif  // MATRIX_HPP_

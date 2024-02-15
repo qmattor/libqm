@@ -11,15 +11,13 @@ void stopwatch::reset() {
 }
 
 void stopwatch::pause() {
-  if (this->is_paused)
-    return;
+  if (this->is_paused) return;
   this->prior_accum += clock() - this->start_time;
   this->is_paused = true;
 }
 
 void stopwatch::resume() {
-  if (!this->is_paused)
-    return;
+  if (!this->is_paused) return;
   this->start_time = clock();
   this->is_paused = false;
 }
@@ -45,4 +43,4 @@ double stopwatch::get_min() const {
 int stopwatch::get_ticks() const {
   return (clock() - this->start_time) + this->prior_accum;
 }
-} // namespace libqm
+}  // namespace libqm

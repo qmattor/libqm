@@ -6,17 +6,19 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:04:45 by qmattor           #+#    #+#             */
-/*   Updated: 2023/10/21 16:55:19 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/12 12:48:26 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Quincy Mattor
 // copyright 2023
 
-#include "error.hpp"
-#include <cstdarg>
 #include <stdio.h>
+
+#include <cstdarg>
 #include <string>
+
+#include "error.hpp"
 
 #ifndef __QM_LOGGING__
 #define __QM_LOGGING__
@@ -37,6 +39,6 @@ void close_log();
 
 #define logNL libqm::log("\n")
 #define logDNL libqm::log(libqm::verbosity::DEBUG, "\n")
-}; // namespace libqm
+};  // namespace libqm
 
 #endif

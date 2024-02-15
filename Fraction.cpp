@@ -6,15 +6,17 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 12:00:52 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/03 00:58:30 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/15 15:37:56 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Fraction.hpp"
-#include "error.hpp"
-#include "logging.hpp"
+#include "fraction.hpp"
+
 #include <cmath>
 #include <iostream>
+
+#include "error.hpp"
+#include "logging.hpp"
 namespace libqm {
 // private
 static int gcd(FracType a, FracType b) {
@@ -40,8 +42,7 @@ void Frac::reduce() {
 #pragma region constructors
 Frac::Frac() : numerator(0), denominator(1) {}
 Frac::Frac(long a, long b) : numerator(a) {
-  if (b == 0)
-    QM_exception(std::runtime_error("value out of bounds"));
+  if (b == 0) QM_exception(std::runtime_error("value out of bounds"));
   if (b < 0) {
     numerator = -numerator;
     b = -b;
@@ -64,6 +65,11 @@ Frac Frac::operator=(int i) {
 }
 
 #pragma endregion
+
+// doesn't fit in structure of code so I'm sticking it here
+double Frac::to_double() {
+  return (((double)numerator) / ((double)denominator));
+}
 
 #pragma region comparators
 bool Frac::operator==(const Frac other) const {
@@ -125,14 +131,16 @@ Frac Frac::operator/=(const Frac &other) {
 }
 Frac Frac::operator+(const Frac &other) const {
   Frac ret;
-  ret.numerator = denominator * other.numerator + numerator * other.denominator;
+  ret.numerator =
+      denominator * other.numerator + numerator * other.denominator;
   ret.denominator = this->denominator * other.denominator;
   ret.reduce();
   return ret;
 }
 Frac Frac::operator+=(const Frac &other) {
   Frac ret;
-  ret.numerator = denominator * other.numerator + numerator * other.denominator;
+  ret.numerator =
+      denominator * other.numerator + numerator * other.denominator;
   ret.denominator = this->denominator * other.denominator;
   ret.reduce();
   *this = ret;
@@ -146,7 +154,8 @@ Frac Frac::operator-(const Frac &other) const {
 }
 Frac Frac::operator-=(const Frac &other) {
   Frac ret;
-  ret.numerator = numerator * other.denominator - denominator * other.numerator;
+  ret.numerator =
+      numerator * other.denominator - denominator * other.numerator;
   ret.denominator = this->denominator * other.denominator;
   ret.reduce();
   *this = ret;
@@ -257,7 +266,6 @@ Frac Frac::operator-=(int i) {
   reduce();
   return *this;
 }
-
 #pragma endregion
 
-} // namespace libqm
+}  // namespace libqm

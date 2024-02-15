@@ -3,7 +3,7 @@ NAME := libqm.a
 CFLAGS := -Wall -Wextra -Werror -pedantic -std=c++14
 LIBFT := libft/libft.a
 GNL := get_next_line/get_next_line.a
-SRC := error.cpp timer.cpp logging.cpp Fraction.cpp
+SRC := error.cpp timer.cpp logging.cpp fraction.cpp complex.cpp
 
 OBJECTS := $(patsubst %.cpp,%.o,$(SRC))
 

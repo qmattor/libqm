@@ -6,24 +6,25 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 11:52:22 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/02 12:32:54 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/15 15:36:00 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iostream>
+
 #include "error.hpp"
 #include "logging.hpp"
-#include <iostream>
 
 namespace libqm {
 typedef long FracType;
 
 class Frac {
-private:
+ private:
   FracType numerator;
   FracType denominator;
   void reduce();
 
-public:
+ public:
   Frac();
   //   Frac(double);
   Frac(int);
@@ -33,10 +34,11 @@ public:
   inline FracType get_denominator() { return denominator; }
   inline void set_numerator(FracType n) { numerator = n; }
   inline void set_denominator(FracType d) {
-    if (d == 0)
-      QM_exception(std::runtime_error("value out of bounds"));
+    if (d == 0) QM_exception(std::runtime_error("value out of bounds"));
     denominator = d;
   }
+
+  double to_double();
 
   Frac operator=(long);
   Frac operator=(int);
@@ -79,4 +81,4 @@ public:
   friend std::istream &operator>>(std::istream &, Frac &);
   friend std::ostream &operator<<(std::ostream &, const Frac &);
 };
-} // namespace libqm
+}  // namespace libqm

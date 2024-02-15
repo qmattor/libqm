@@ -37,9 +37,8 @@ main.cpp
 #debugging
 *.dsym
 
-#hidden
-.*
-
+# GNL
+get_next_line
 
 #log files
 *.log
