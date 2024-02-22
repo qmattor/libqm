@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 11:52:22 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/15 15:36:00 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/21 11:58:49 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ class Frac {
   Frac operator-(long) const;
   Frac operator-=(long);
 
-  Frac operator*(int) const;
-  Frac operator*=(int);
-  Frac operator/(int) const;
-  Frac operator/=(int);
-  Frac operator+(int) const;
-  Frac operator+=(int);
-  Frac operator-(int) const;
-  Frac operator-=(int);
+  // Frac operator*(int) const;
+  // Frac operator*=(int);
+  // Frac operator/(int) const;
+  // Frac operator/=(int);
+  // Frac operator+(int) const;
+  // Frac operator+=(int);
+  // Frac operator-(int) const;
+  // Frac operator-=(int);
 
   //   friend funcs
   // form of x/y

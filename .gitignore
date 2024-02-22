@@ -33,12 +33,10 @@
 
 #testing
 main.cpp
+tests
 
 #debugging
 *.dsym
-
-# GNL
-get_next_line
 
 #log files
 *.log

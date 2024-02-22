@@ -14,8 +14,6 @@ all: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJECTS)
-	# make -C libft
-	# make -C get_next_line
 	ar rc $@ $^
 	ranlib $(NAME)
 

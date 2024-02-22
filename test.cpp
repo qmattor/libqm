@@ -68,6 +68,8 @@ BOOST_AUTO_TEST_CASE(TEST_FRACTIONS) {
   close_log();
 }
 
+BOOST_AUTO_TEST_CASE(TEST_COMPLEX) {}
+
 BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
   init_log("TEST_MATRIX.log");
   log_setverbosity(verbosity::DEBUG);
@@ -135,9 +137,158 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
     y -= 2;
     BOOST_CHECK_EQUAL(y.contains(14), false);
     BOOST_CHECK_EQUAL(y.foreach([](int8_t &x) { return x == 12; }), true);
-    log("completed\nchecking matrix operations ... ");
+    log("completed\nchecking matrix operations ... \n");
+    matrix<int> p(1, 2);
+    matrix<int> r(2, 2);
+    matrix<int> result(1, 2);
+    p(0, 0) = 5;
+    p(0, 1) = 6;
 
-  } catch (...) {
+    r(0, 0) = 1;
+    r(1, 0) = 2;
+    r(0, 1) = 3;
+    r(1, 1) = 4;
+
+    result(0, 0) = 17;
+    result(0, 1) = 39;
+    BOOST_CHECK_EQUAL(result, r * p);
+    log("completed small matrix mult, trying large\n");
+    p.resize(6, 5);
+    r.resize(4, 6);
+    result.resize(4, 5);
+    log("resize completed beginning setting values\n");
+
+    p(0, 0) = 1;
+    p(1, 0) = 2;
+    p(2, 0) = 3;
+    p(3, 0) = 4;
+    p(4, 0) = 5;
+    p(5, 0) = 6;
+
+    p(0, 1) = 7;
+    p(1, 1) = 8;
+    p(2, 1) = 9;
+    p(3, 1) = 10;
+    p(4, 1) = 11;
+    p(5, 1) = 12;
+
+    p(0, 2) = 13;
+    p(1, 2) = 14;
+    p(2, 2) = 15;
+    p(3, 2) = 16;
+    p(4, 2) = 17;
+    p(5, 2) = 18;
+
+    p(0, 3) = 19;
+    p(1, 3) = 20;
+    p(2, 3) = 21;
+    p(3, 3) = 22;
+    p(4, 3) = 23;
+    p(5, 3) = 24;
+
+    p(0, 4) = 25;
+    p(1, 4) = 26;
+    p(2, 4) = 27;
+    p(3, 4) = 28;
+    p(4, 4) = 29;
+    p(5, 4) = 30;
+
+    r(0, 0) = 1;
+    r(1, 0) = 2;
+    r(2, 0) = 3;
+    r(3, 0) = 4;
+
+    r(0, 1) = 5;
+    r(1, 1) = 6;
+    r(2, 1) = 7;
+    r(3, 1) = 8;
+
+    r(0, 2) = 9;
+    r(1, 2) = 10;
+    r(2, 2) = 11;
+    r(3, 2) = 12;
+
+    r(0, 3) = 13;
+    r(1, 3) = 14;
+    r(2, 3) = 15;
+    r(3, 3) = 16;
+
+    r(0, 4) = 17;
+    r(1, 4) = 18;
+    r(2, 4) = 19;
+    r(3, 4) = 20;
+
+    r(0, 5) = 21;
+    r(1, 5) = 22;
+    r(2, 5) = 23;
+    r(3, 5) = 24;
+
+    result(0, 0) = 301;
+    result(1, 0) = 322;
+    result(2, 0) = 343;
+    result(3, 0) = 364;
+
+    result(0, 1) = 697;
+    result(1, 1) = 754;
+    result(2, 1) = 811;
+    result(3, 1) = 868;
+
+    result(0, 2) = 1093;
+    result(1, 2) = 1186;
+    result(2, 2) = 1279;
+    result(3, 2) = 1372;
+
+    result(0, 3) = 1489;
+    result(1, 3) = 1618;
+    result(2, 3) = 1747;
+    result(3, 3) = 1876;
+
+    result(0, 4) = 1885;
+    result(1, 4) = 2050;
+    result(2, 4) = 2215;
+    result(3, 4) = 2380;
+    log("values set, beginning mult op\n");
+
+    BOOST_CHECK_EQUAL(result, p * r);
+
+    log("totally remembered to finish this...\nchecking transpose ... \n");
+    matrix<int> A(2, 2);
+    matrix<int> A_prime(2, 2);
+    A(0, 0) = 1;
+    A(1, 0) = 3;
+    A(0, 1) = 6;
+    A(1, 1) = 4;
+    A_prime(0, 0) = 1;
+    A_prime(1, 0) = 6;
+    A_prime(0, 1) = 3;
+    A_prime(1, 1) = 4;
+    BOOST_CHECK_EQUAL(A.Transpose(), A_prime);
+    A.resize(2, 5);
+    A_prime.resize(5, 2);
+    A(0, 0) = 1;
+    A(0, 1) = 6;
+    A(0, 2) = 1;
+    A(0, 3) = 6;
+    A(0, 4) = 1;
+    A(1, 0) = 3;
+    A(1, 1) = 4;
+    A(1, 2) = 3;
+    A(1, 3) = 4;
+    A(1, 4) = 3;
+    A_prime(0, 0) = 1;
+    A_prime(1, 0) = 6;
+    A_prime(2, 0) = 1;
+    A_prime(3, 0) = 6;
+    A_prime(4, 0) = 1;
+    A_prime(0, 1) = 3;
+    A_prime(1, 1) = 4;
+    A_prime(2, 1) = 3;
+    A_prime(3, 1) = 4;
+    A_prime(4, 1) = 3;
+    BOOST_CHECK_EQUAL(A.Transpose(), A_prime);
+    log("done\n");
+  } catch (std::exception &e) {
+    BOOST_FAIL(e.what());
   }
   close_log();
 }

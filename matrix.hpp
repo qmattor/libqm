@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:03:45 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/13 00:33:24 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/22 11:21:37 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <functional>
 #include <iostream>
 #include <vector>
-
-#include "logging.hpp"
 
 #ifndef MATRIX_HPP_
 #define MATRIX_HPP_
@@ -37,7 +35,7 @@ class matrix {
   matrix(size_t x, size_t y, T init);
   matrix(matrix &&other) noexcept;
   matrix(const matrix &other);
-  // ~matrix();
+  matrix<T> Transpose();
   matrix<T> &operator=(const matrix<T> &other);
   matrix<T> &operator=(matrix<T> &&other) noexcept;
   bool operator!=(const matrix<T> &) const;
@@ -46,6 +44,9 @@ class matrix {
   matrix<T> operator*(const matrix<T> &other);
   matrix<T> operator+(const matrix<T> &other);
   matrix<T> operator-(const matrix<T> &other);
+  // matrix<T> operator*=(const matrix<T> &other);
+  matrix<T> operator+=(const matrix<T> &other);
+  matrix<T> operator-=(const matrix<T> &other);
   // scaler ops
   matrix<T> operator*(const T scaler);
   matrix<T> operator*=(const T scaler);
@@ -73,7 +74,6 @@ class matrix {
   void row_swap(size_t a, size_t b);
   // row a += b
   void add_rows(size_t a, size_t b);
-
   void scale_row(size_t a, T scalor);
 
   template <class Z>
@@ -100,7 +100,17 @@ matrix<T>::matrix(size_t x, size_t y) : y(y), x(x) {
   elements.resize(y * x);
 }
 
-// template <class T> matrix<T>::~matrix() { delete this->elements; }
+//flip rows and cols
+template <class T>
+matrix<T> matrix<T>::Transpose() {
+  matrix<T> ret(y, x);
+  for (size_t i = 0; i < y; i++) {
+    for (size_t j = 0; j < x; j++) {
+      ret(i, j) = this->at(j, i);
+    }
+  }
+  return ret;
+}
 
 template <class T>
 matrix<T>::matrix(matrix &&other) noexcept {
@@ -167,12 +177,9 @@ size_t matrix<T>::get_size() const {
   return this->elements.size();
 }
 
-// removed temporarily
-
 template <class T>
 bool matrix<T>::resize(size_t new_x, size_t new_y) {
   if (new_x == 0 || new_y == 0) return false;
-
   // fuck it, don't care about maintaining elements in the right spot.
   x = new_x;
   y = new_y;
@@ -207,9 +214,6 @@ bool matrix<T>::operator!=(const matrix<T> &other) const {
   return false;
 }
 
-// std::__vector_base<s_state_node, std::allocator<s_state_node>>::value_type
-// std::__vector_base<s_state_node, std::allocator<s_state_node>>::value_type
-
 template <class T>
 bool matrix<T>::operator==(const matrix &other) const {
   if (other.y != this->y) return false;
@@ -225,21 +229,17 @@ bool matrix<T>::operator==(const matrix &other) const {
 
 template <class T>
 bool matrix<T>::contains(T ele) const {
-  log(verbosity::DEBUG, "begining contains\n");
   for (T e : this->elements) {
     if (e == ele) return true;
   }
-  log(verbosity::DEBUG, "finishing contains\n");
   return false;
 }
 
 template <class T>
 bool matrix<T>::contains(std::function<bool(T)> func) const {
-  log(verbosity::DEBUG, "begining contains\n");
   for (auto e : this->elements)
     if (func(e)) return true;
   return false;
-  log(verbosity::DEBUG, "finishing contains\n");
 }
 
 template <class T>
@@ -305,21 +305,26 @@ std::ostream &operator<<(std::ostream &out, const matrix<T> &m) {
 // matrix cross product
 template <class T>
 matrix<T> matrix<T>::operator*(const matrix<T> &other) {
-  if (other.x != this->x || other.y != this->y || other.y != this->x)
-    throw std::runtime_error("Matrix mismatch");
-  matrix<T> ret(this->x, this->y);
+  if (this->x != other.y) throw std::runtime_error("Matrix mismatch");
+  matrix<T> ret(other.x, this->y);
   for (size_t y = 0; y < this->y; y++) {
-    for (size_t x = 0; x < this->x; x++) {
-      size_t y1 = 0;
-      T sum = (this->at(0, y) * other(x, y1++));
-      for (size_t x1 = 1; x1 < this->x; x1++) {
-        sum = sum + ((this->at(x1, y) * other(x, y1++)));
+    for (size_t x = 0; x < other.x; x++) {
+      T sum = (this->at(0, y) * other(x, 0));
+      for (size_t z = 1; z < this->x; z++) {
+        sum = sum + (this->at(z, y) * other(x, z));
       }
       ret(x, y) = sum;
     }
   }
   return ret;
 }
+// removed for ambiguity regarding left hand vs right hand multiply
+
+// template <class T>
+// matrix<T> matrix<T>::operator*=(const matrix<T> &other) {
+//   *this = *this * other;
+//   return *this;
+// }
 
 template <class T>
 matrix<T> matrix<T>::operator+(const matrix<T> &other) {
@@ -333,11 +338,16 @@ matrix<T> matrix<T>::operator+(const matrix<T> &other) {
   }
   return ret;
 }
+template <class T>
+matrix<T> matrix<T>::operator+=(const matrix<T> &other) {
+  *this = *this + other;
+  return *this;
+}
 
 template <class T>
 matrix<T> matrix<T>::operator-(const matrix<T> &other) {
   if (other.x != this->x || other.y != this->y)
-    throw std::runtime_error("Matrix mismatch");
+    QM_exception(std::runtime_error("Matrix mismatch"));
   matrix<T> ret(this->x, this->y);
   for (size_t y = 0; y < this->y; y++) {
     for (size_t x = 0; x < this->x; x++) {
@@ -346,6 +356,14 @@ matrix<T> matrix<T>::operator-(const matrix<T> &other) {
   }
   return ret;
 }
+
+template <class T>
+matrix<T> matrix<T>::operator-=(const matrix<T> &other) {
+  *this = *this - other;
+  return *this;
+}
+
+//scaler ops
 
 template <class T>
 matrix<T> matrix<T>::operator+(const T scaler) {

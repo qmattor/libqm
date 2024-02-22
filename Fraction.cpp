@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 12:00:52 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/15 15:37:56 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/21 11:58:57 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,50 +222,50 @@ Frac Frac::operator-=(long l) {
   return *this;
 }
 
-Frac Frac::operator*(int i) const {
-  Frac f = *this;
-  f.numerator *= i;
-  f.reduce();
-  return f;
-}
-Frac Frac::operator*=(int i) {
-  numerator *= i;
-  reduce();
-  return *this;
-}
-Frac Frac::operator/(int i) const {
-  Frac f = *this;
-  f.denominator *= i;
-  f.reduce();
-  return f;
-}
-Frac Frac::operator/=(int i) {
-  denominator *= i;
-  reduce();
-  return *this;
-}
-Frac Frac::operator+(int i) const {
-  Frac f = *this;
-  f.numerator += i * f.denominator;
-  f.reduce();
-  return f;
-}
-Frac Frac::operator+=(int i) {
-  numerator += denominator * i;
-  reduce();
-  return *this;
-}
-Frac Frac::operator-(int i) const {
-  Frac f = *this;
-  f.numerator -= i * f.denominator;
-  f.reduce();
-  return f;
-}
-Frac Frac::operator-=(int i) {
-  numerator -= denominator * i;
-  reduce();
-  return *this;
-}
+// Frac Frac::operator*(int i) const {
+//   Frac f = *this;
+//   f.numerator *= i;
+//   f.reduce();
+//   return f;
+// }
+// Frac Frac::operator*=(int i) {
+//   numerator *= i;
+//   reduce();
+//   return *this;
+// }
+// Frac Frac::operator/(int i) const {
+//   Frac f = *this;
+//   f.denominator *= i;
+//   f.reduce();
+//   return f;
+// }
+// Frac Frac::operator/=(int i) {
+//   denominator *= i;
+//   reduce();
+//   return *this;
+// }
+// Frac Frac::operator+(int i) const {
+//   Frac f = *this;
+//   f.numerator += i * f.denominator;
+//   f.reduce();
+//   return f;
+// }
+// Frac Frac::operator+=(int i) {
+//   numerator += denominator * i;
+//   reduce();
+//   return *this;
+// }
+// Frac Frac::operator-(int i) const {
+//   Frac f = *this;
+//   f.numerator -= i * f.denominator;
+//   f.reduce();
+//   return f;
+// }
+// Frac Frac::operator-=(int i) {
+//   numerator -= denominator * i;
+//   reduce();
+//   return *this;
+// }
 #pragma endregion
 
 }  // namespace libqm
