@@ -1,6 +1,7 @@
 CC := g++
 NAME := libqm.a
 CFLAGS := -Wall -Wextra -Werror -pedantic -std=c++14
+CTESTFLAGS := -std=c++14
 LIBFT := libft/libft.a
 GNL := get_next_line/get_next_line.a
 SRC := error.cpp timer.cpp logging.cpp fraction.cpp complex.cpp
@@ -31,6 +32,7 @@ fclean: clean lclean
 	# make -C get_next_line fclean
 	rm -f tests
 	rm -f main.out
+	rm -rf main.out.dsym
 	rm -f $(NAME)
 
 re: fclean all
@@ -42,4 +44,4 @@ test: $(OBJECTS)
 	$(CC) $(CFLAGS) $^ test.o -lboost_unit_test_framework -o tests
 
 main_test: $(OBJECTS)
-	$(CC) $(CFLAGS) -g $^ main.cpp -o main.out
+	$(CC) $(CTESTFLAGS) -g $^ main.cpp -o main.out

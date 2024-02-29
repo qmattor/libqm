@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:03:45 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/22 11:21:37 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/02/29 15:59:01 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class matrix {
   matrix();  // purely for use of creating blank things to overwrite later
   matrix(size_t x, size_t y);
   matrix(size_t x, size_t y, T init);
+  // liable to segfault if parameters are incorrect.
+  matrix(T *eles, size_t x, size_t y);
   matrix(matrix &&other) noexcept;
   matrix(const matrix &other);
   matrix<T> Transpose();
@@ -44,6 +46,7 @@ class matrix {
   matrix<T> operator*(const matrix<T> &other);
   matrix<T> operator+(const matrix<T> &other);
   matrix<T> operator-(const matrix<T> &other);
+  // removed due to ambiguity
   // matrix<T> operator*=(const matrix<T> &other);
   matrix<T> operator+=(const matrix<T> &other);
   matrix<T> operator-=(const matrix<T> &other);
@@ -98,6 +101,12 @@ template <class T>
 matrix<T>::matrix(size_t x, size_t y) : y(y), x(x) {
   if (y == 0 || x == 0) throw std::runtime_error("invalid initial size");
   elements.resize(y * x);
+}
+
+template <class T>
+matrix<T>::matrix(T *eles, size_t x, size_t y) : y(y), x(x) {
+  elements.resize(x * y);
+  for (size_t i = 0; i < x * y; i++) elements[i] = eles[i];
 }
 
 //flip rows and cols

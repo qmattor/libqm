@@ -62,6 +62,7 @@ BOOST_AUTO_TEST_CASE(TEST_FRACTIONS) {
 
     log(verbosity::NORMAL, "cheking throw\n");
     BOOST_CHECK_THROW(Frac(0, 0), std::runtime_error);
+    log(verbosity::NORMAL, "done\n");
 
   } catch (...) {
   }
@@ -75,13 +76,36 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
   log_setverbosity(verbosity::DEBUG);
   try {
     log("BEGIN MATRIX\n");
-    log("beigning signal alarm for 5 seconds\n");
     matrix<int8_t> m(2, 3, 3);
     log("matrix is initialized\nconfirming matrix is initalized to the "
         "correct "
         "values ... ");
     BOOST_CHECK_EQUAL(m(1, 2), 3);
     BOOST_CHECK_EQUAL(m(0, 1), 3);
+    uint8_t two_d[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    matrix<uint8_t> two_dimention_pointer((uint8_t *)two_d, 3, 3);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(0, 0), 1);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(1, 0), 2);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(2, 0), 3);
+
+    BOOST_CHECK_EQUAL(two_dimention_pointer(0, 1), 4);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(1, 1), 5);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(2, 1), 6);
+
+    BOOST_CHECK_EQUAL(two_dimention_pointer(0, 2), 7);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(1, 2), 8);
+    BOOST_CHECK_EQUAL(two_dimention_pointer(2, 2), 9);
+    uint16_t two_d_2[2][3] = {{1, 2, 3}, {4, 5, 6}};
+
+    matrix<uint16_t> two_dimention((uint16_t *)two_d_2, 3, 2);
+    BOOST_CHECK_EQUAL(two_dimention(0, 0), 1);
+    BOOST_CHECK_EQUAL(two_dimention(1, 0), 2);
+    BOOST_CHECK_EQUAL(two_dimention(2, 0), 3);
+
+    BOOST_CHECK_EQUAL(two_dimention(0, 1), 4);
+    BOOST_CHECK_EQUAL(two_dimention(1, 1), 5);
+    BOOST_CHECK_EQUAL(two_dimention(2, 1), 6);
+
     log("completed\nconfiriming size ... ");
     BOOST_CHECK_EQUAL(m.get_x(), (size_t)2);
     BOOST_CHECK_EQUAL(m.get_y(), (size_t)3);
