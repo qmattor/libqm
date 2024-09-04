@@ -287,32 +287,66 @@ BOOST_AUTO_TEST_CASE(TEST_MATRIX) {
     A_prime(0, 1) = 3;
     A_prime(1, 1) = 4;
     BOOST_CHECK_EQUAL(A.Transpose(), A_prime);
-    A.resize(2, 5);
-    A_prime.resize(5, 2);
+    A.resize(3, 5);
+    A_prime.resize(5, 3);
     A(0, 0) = 1;
-    A(0, 1) = 6;
-    A(0, 2) = 1;
-    A(0, 3) = 6;
-    A(0, 4) = 1;
-    A(1, 0) = 3;
+    A(0, 1) = 2;
+    A(0, 2) = 3;
+    A(0, 3) = 4;
+    A(0, 4) = 5;
+    A(1, 0) = 5;
     A(1, 1) = 4;
     A(1, 2) = 3;
-    A(1, 3) = 4;
-    A(1, 4) = 3;
+    A(1, 3) = 2;
+    A(1, 4) = 1;
+    A(2, 0) = 9;
+    A(2, 1) = 8;
+    A(2, 2) = 7;
+    A(2, 3) = 6;
+    A(2, 4) = 5;
     A_prime(0, 0) = 1;
-    A_prime(1, 0) = 6;
-    A_prime(2, 0) = 1;
-    A_prime(3, 0) = 6;
-    A_prime(4, 0) = 1;
-    A_prime(0, 1) = 3;
+    A_prime(1, 0) = 2;
+    A_prime(2, 0) = 3;
+    A_prime(3, 0) = 4;
+    A_prime(4, 0) = 5;
+    A_prime(0, 1) = 5;
     A_prime(1, 1) = 4;
     A_prime(2, 1) = 3;
-    A_prime(3, 1) = 4;
-    A_prime(4, 1) = 3;
+    A_prime(3, 1) = 2;
+    A_prime(4, 1) = 1;
+    A_prime(0, 2) = 9;
+    A_prime(1, 2) = 8;
+    A_prime(2, 2) = 7;
+    A_prime(3, 2) = 6;
+    A_prime(4, 2) = 5;
     BOOST_CHECK_EQUAL(A.Transpose(), A_prime);
     log("done\n");
   } catch (std::exception &e) {
     BOOST_FAIL(e.what());
+  }
+  close_log();
+}
+
+BOOST_AUTO_TEST_CASE(TEST_BYTE_BUFFER) {
+  init_log("TEST_BYTE_BUFFER.log");
+  log_setverbosity(verbosity::DEBUG);
+  try {
+    bytebuffer<2> b(20);
+    BOOST_CHECK_THROW(bytebuffer<3> c(10), std::runtime_error);
+    for (int x = 0; x < 20; x++) BOOST_CHECK_EQUAL(b.get(x), 0);
+    for (int x = 0; x < 20; x++) b.set(2, x);
+    for (int x = 0; x < 20; x++) BOOST_CHECK_EQUAL(b.get(x), 2);
+    for (int x = 0; x < 20; x++) b.set(1, x);
+    for (int x = 0; x < 20; x++) BOOST_CHECK_EQUAL(b.get(x), 1);
+    for (int x = 0; x < 20; x++) b.set(1, x);
+    for (int x = 0; x < 20; x++) BOOST_CHECK_EQUAL(b.get(x), 1);
+    for (int x = 0; x < 20; x++) b.set(3, x);
+    b.clear();
+    for (int x = 0; x < 20; x++) BOOST_CHECK_EQUAL(b.get(x), 0);
+
+  } catch (std::exception &e) {
+    log(e.what());
+    throw;
   }
   close_log();
 }

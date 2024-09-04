@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 12:03:45 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/29 15:59:01 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/08/18 11:05:27 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,6 @@ class matrix {
   bool contains(std::function<bool(T)> func) const;
   bool contains(std::function<bool(size_t, size_t, T)>) const;
   T &find(T);
-
-  void row_swap(size_t a, size_t b);
-  // row a += b
-  void add_rows(size_t a, size_t b);
-  void scale_row(size_t a, T scalor);
 
   template <class Z>
   friend std::istream &operator>>(std::istream &, matrix<Z> &);
@@ -444,29 +439,5 @@ matrix<T> matrix<T>::operator/(const T scaler) {
   });
   return ret;
 }
-
-template <class T>
-void matrix<T>::row_swap(size_t a, size_t b) {
-  for (size_t x = 0; x < this->x; x++) {
-    T tmp = at(x, a);
-    at(x, a) = at(x, b);
-    at(x, b) = tmp;
-  }
-}
-
-template <class T>
-void matrix<T>::add_rows(size_t a, size_t b) {
-  for (size_t x = 0; x < this->x; x++) {
-    at(x, a) += at(x, b);
-  }
-}
-
-template <class T>
-void matrix<T>::scale_row(size_t a, T scalor) {
-  for (size_t x = 0; x < this->x; x++) {
-    at(x, a) *= scalor;
-  }
-}
-
 }  // namespace libqm
 #endif  // MATRIX_HPP_

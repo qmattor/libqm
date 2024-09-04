@@ -6,7 +6,7 @@
 /*   By: qmattor <Quincy_Mattor@student.uml.edu>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 11:52:22 by qmattor           #+#    #+#             */
-/*   Updated: 2024/02/21 11:58:49 by qmattor          ###   ########.fr       */
+/*   Updated: 2024/04/18 12:55:09 by qmattor          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 namespace libqm {
 typedef long FracType;
 
+// This is to be used exclusivly for rational numbers. Operations will otherwise be
+// not closed and could not result in fractions meaning that they don't neccisarily
+// have answers
+// For irrational numbers use floats. This just cleans stuff up a bit
 class Frac {
  private:
   FracType numerator;
